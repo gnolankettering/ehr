@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { EHR } from "./abi/abi";
 import Web3 from "web3";
 import "./App.css";
@@ -19,15 +19,14 @@ function App() {
   const [reportDescription, setReportDescription] = useState("");
   const [patientCount, setPatientCount] = useState(0);
   const [reportCount, setReportCount] = useState(0);
-  const [ehrContract, setEHRContract] = useState(null);
   const [reportId, setReportId] = useState(1);
   const [report, setReport] = useState({});
   
-  const loadEHRContract = async () => {
-    // load EHR contract here
-    const ehrContract = new web3.eth.Contract(EHR, contractAddress);
-    setEHRContract(ehrContract);
+  useEffect(() => {
+    loadEHRContract()
+  }, [])
 
+  const loadEHRContract = async () => {
     // get patient and report counts
     const countPatient = await ehrContract.methods.patientCount().call();
     setPatientCount(countPatient);
